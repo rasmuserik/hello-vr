@@ -1,0 +1,13 @@
+{
+  "name": "hello-vr",
+  "main": "electron-dev.js",
+  "xmain": "nwjs-dev.html",
+  "dependencies": {
+    "express": "^4.14.0",
+    "jsdom": "^9.5.0",
+    "request": "^2.75.0",
+    "xmlhttprequest": "^1.8.0"
+  },
+  "devDependencies": {
+  }
+}
