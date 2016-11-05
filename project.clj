@@ -9,11 +9,12 @@
    [binaryage/devtools "0.6.1"]]
 
   :plugins
-  [[lein-cljsbuild "1.1.3"]
+  [[lein-cljsbuild "1.1.4" :exclusions  [[org.clojure/clojure]]]
    [lein-ancient "0.6.8"]
-   [lein-figwheel "0.5.0-2"]
+   [lein-figwheel "0.5.8"]
    [lein-bikeshed "0.2.0"]
    [lein-kibit "0.1.2"]]
+
 
   :source-paths ["src/" "util/src/"]
 
@@ -36,20 +37,19 @@
      [cider/cider-nrepl "0.13.0-SNAPSHOT"]]
     }}
 
+
   :cljsbuild
   {:builds
-   [
-
-    {:id "dev"
-      :source-paths ["src/" "util/src/"]
-      :figwheel
-      {:websocket-host :js-client-host}
-      :compiler
-      {:main solsort.hello-vr.hello-vr
-       :asset-path "out"
-       :output-to "resources/public/index.js"
-       :output-dir "resources/public/out"
-       :source-map-timestamp true }}
+   [ {:id "dev"
+     :source-paths ["src/" "util/src/"]
+     :figwheel
+     {:websocket-host :js-client-host}
+     :compiler
+     {:main solsort.hello-vr.hello-vr
+      :asset-path "out"
+      :output-to "resources/public/index.js"
+      :output-dir "resources/public/out"
+      :source-map-timestamp true }}
     {:id "dist"
      :source-paths ["src" "util/src/"]
      :compiler
@@ -59,4 +59,4 @@
       :optimizations :simple
       :pretty-print false}}
     ]}
-)
+  )

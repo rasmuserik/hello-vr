@@ -28,6 +28,10 @@
 
 ;; code for setting up the model
 
+;var cube = new THREE.Mesh(
+;                      new THREE.BoxGeometry(0.5, 0.5, 0.5),
+;                      new THREE.MeshNormalMaterial()
+;                      )
 (let [cube (js/THREE.Mesh.
             (js/THREE.BoxGeometry. 0.5 0.5 0.5)
             (js/THREE.MeshNormalMaterial.))]

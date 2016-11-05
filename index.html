@@ -16,13 +16,15 @@
     <style>
 canvas {position: absolute; top: 0; left: 0; right: 0; bottom: 0;}
     </style>
-    <div style="position:fixed;z-index:1;background:white;border-radius:10px;display:inline-block;max-width:50em;padding:10px">
+    <div id="info"  style="position:fixed;z-index:1;background:white;border-radius:10px;display:inline-block;max-width:50em;padding:10px">
         Playing around with visualisation tv-programs/film-clips into VR.<br>
         Part of <a href="http://2016.tvhackday.com/">TV-Hackday 2016</a><br>
         <br>
+        <video src="assets/tears-of-steel.m4v" autoplay></video>
       <button id="fullscreen">Fullscreen</button>
       <button id="vr">VR (WebVR/Mobile only)</button>
       <button id="reset">Reset</button>
+      <button onclick="info.style.display='none'">Hide</button>
     </div>
 
     <script> WebVRConfig = { BUFFER_SCALE: 1 }; </script>
