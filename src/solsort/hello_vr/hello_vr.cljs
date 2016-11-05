@@ -39,9 +39,11 @@
   (.add js/scene cube)
   )
 
+(js/console.log "helo")
 ;; misc
 
 (.resetPose js/vrDisplay)
+
 
 (defn testFunc
   [para1]
@@ -49,5 +51,4 @@
 )
 
 (testFunc 123)
-
 
