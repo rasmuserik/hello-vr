@@ -32,11 +32,46 @@
 ;                      new THREE.BoxGeometry(0.5, 0.5, 0.5),
 ;                      new THREE.MeshNormalMaterial()
 ;                      )
-(let [cube (js/THREE.Mesh.
+
+(let [canvas (doto (js/document.createElement "canvas")
+               (aset "width" 256)
+               (aset "height" 128)
+               )
+      context (doto (.getContext canvas "2d")
+        (aset "fillStyle" "blue")
+        (.fillRect 20,20,100,60)
+        (aset "fillStyle" "red")
+        (aset "font" "30px sans-serif")
+        (.fillText "it works" 10 30)
+        (.drawImage js/video 0 0 256 128)
+        )
+      texture (doto (js/THREE.Texture. canvas)
+                (aset "needsUpdate" true))
+      material (js/THREE.MeshBasicMaterial. #js {:map texture
+                                                 :side js/THREE.DoubleSide})
+      tv (js/THREE.Mesh.
+              (js/THREE.PlaneGeometry. (.-width canvas) (.-height canvas))
+              material)
+      cube (js/THREE.Mesh.
             (js/THREE.BoxGeometry. 0.5 0.5 0.5)
-            (js/THREE.MeshNormalMaterial.))]
-  (aset (.-position cube) "z" -1)
-  (.add js/scene cube)
+           ; (js/THREE.MeshNormalMaterial.)
+            material
+            )
+      ]
+  (aset js/window "m" material)
+  (.set (.-position tv) 0 0 -200)
+  (aset (.-position cube) "z" -0.5)
+  (.add js/scene tv)
+  ;(.add js/scene cube)
+  (aset js/window "animate"
+        (fn []
+          (.drawImage context js/video 0 0 256 128)
+          (aset material "map"
+                (doto (js/THREE.Texture. canvas) (aset "needsUpdate" true)))
+          (aset material "needsUpdate" true)
+          (aset tv "needsUpdate" true)
+          #_(js/console.log "update")
+          ))
   )
 
 (js/console.log "helo")
