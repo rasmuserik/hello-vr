@@ -14,92 +14,41 @@
   </head>
   <body>
     <style>
-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
+canvas {position: absolute; top: 0; left: 0; right: 0; bottom: 0;}
     </style>
-    <div style="position:fixed;z-index:1;">
+    <div style="position:fixed;z-index:1;background:white;border-radius:10px;display:inline-block;max-width:50em;padding:10px">
+        Playing around with visualisation tv-programs/film-clips into VR.<br>
+        Part of <a href="http://2016.tvhackday.com/">TV-Hackday 2016</a><br>
+        <br>
       <button id="fullscreen">Fullscreen</button>
       <button id="vr">VR (WebVR/Mobile only)</button>
       <button id="reset">Reset</button>
     </div>
 
-
-    <script> WebVRConfig = { BUFFER_SCALE: 0.5 }; </script>
+    <script> WebVRConfig = { BUFFER_SCALE: 1 }; </script>
     <script src="https://unpkg.com/three@0.82.1/build/three.js"></script>
     <script src="https://unpkg.com/three@0.82.1/examples/js/controls/VRControls.js"></script>
     <script src="https://unpkg.com/three@0.82.1/examples/js/effects/VREffect.js"></script>
     <script src="https://unpkg.com/webvr-polyfill@0.9.23/build/webvr-polyfill.js"></script>
-
     <script>
 document.addEventListener('touchmove', function(e) { e.preventDefault(); });
 
 var renderer = new THREE.WebGLRenderer({antialias: false});
 renderer.setPixelRatio(Math.floor(window.devicePixelRatio));
 document.body.appendChild(renderer.domElement);
-var scene = new THREE.Scene();
+var scene = window.scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
-
 var vr_controls = new THREE.VRControls(camera);
 var vr_effect = new THREE.VREffect(renderer);
 vr_effect.setSize(window.innerWidth, window.innerHeight);
 
-var vrDisplay = null;
+vrDisplay = null;
 navigator.getVRDisplays().then(function(displays) {
   if (displays.length > 0) {
     vrDisplay = displays[0];
-    vrDisplay.requestAnimationFrame(animate);
+    vrDisplay.requestAnimationFrame(mainloop);
   }
 });
-
-
-var loader = new THREE.TextureLoader();
-loader.load('img/box.png', onTextureLoaded);
-function onTextureLoaded(texture) {
-  var boxWidth = 5;
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(boxWidth, boxWidth);
-  var geometry = new THREE.BoxGeometry(boxWidth, boxWidth, boxWidth);
-  var material = new THREE.MeshBasicMaterial({
-    map: texture,
-    color: 0x01BE00,
-    side: THREE.BackSide
-  });
-  var skybox = new THREE.Mesh(geometry, material);
-  scene.add(skybox);
-}
-
-var geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-var material = new THREE.MeshNormalMaterial();
-var cube = new THREE.Mesh(geometry, material);
-cube.position.z = -1;
-scene.add(cube);
-
-var lastRender = 0;
-function animate(timestamp) {
-  var delta = Math.min(timestamp - lastRender, 500);
-  lastRender = timestamp;
-  cube.rotation.y += delta * 0.0006;
-
-  vr_controls.update();
-  vr_effect.render(scene, camera);
-
-  vrDisplay.requestAnimationFrame(animate);
-}
-
-function onResize() {
-  vr_effect.setSize(window.innerWidth, window.innerHeight);
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-}
-
-window.addEventListener('resize', onResize);
-window.addEventListener('vrdisplaypresentchange', onResize);
 
 document.querySelector('button#fullscreen').addEventListener('click', function() {
   var el = renderer.domElement;
@@ -112,8 +61,20 @@ document.querySelector('button#reset').addEventListener('click', function() {
   vrDisplay.resetPose();
 });
 
-function enterFullscreen (el) {
+function mainloop(timestamp) {
+  window.animate && window.animate()
+  vr_controls.update();
+  vr_effect.render(scene, camera);
+  vrDisplay.requestAnimationFrame(mainloop);
 }
+
+function onResize() {
+  vr_effect.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', onResize);
+window.addEventListener('vrdisplaypresentchange', onResize);
     </script>
     <script src="index.js"></script>
   </body>

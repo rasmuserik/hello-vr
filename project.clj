@@ -56,7 +56,7 @@
      {:output-to "index.js"
       :main solsort.hello-vr.hello-vr
       :externs ["util/externs.js"]
-      :optimizations :advanced
+      :optimizations :simple
       :pretty-print false}}
     ]}
 )
