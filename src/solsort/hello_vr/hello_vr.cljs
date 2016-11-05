@@ -39,6 +39,8 @@
   (.add js/scene cube)
   )
 
+(js/console.log "helo")
 ;; misc
 
 (.resetPose js/vrDisplay)
+
