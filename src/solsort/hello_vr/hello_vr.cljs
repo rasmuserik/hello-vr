@@ -42,3 +42,12 @@
 ;; misc
 
 (.resetPose js/vrDisplay)
+
+(defn testFunc
+  [para1]
+  (js/console.log "test" para1)
+)
+
+(testFunc 123)
+
+
