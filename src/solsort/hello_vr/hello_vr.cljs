@@ -68,7 +68,7 @@
                 (doto (js/THREE.Texture. canvas) (aset "needsUpdate" true)))
           (aset material "needsUpdate" true)
           (aset tv "needsUpdate" true)
-          (let [timepos (bit-or 0 (* 400 (/ js/video.currentTime js/video.duration)))]
+          (let [timepos (bit-or 0 (* 100 (/ js/video.currentTime (* .1 js/video.duration))))]
             (when (not (aget frames timepos))
               (let [canvas (doto (js/document.createElement "canvas")
                              (aset "width" 256)
@@ -84,7 +84,7 @@
                            material)]
                 (aset frames timepos true)
                 (aset js/window "m" material)
-                (.set (.-position frame) (* 256 (- (rem timepos 20) 10)) (* 128 (- 10 (quot timepos 20))) -1000)
+                (.set (.-position frame) (* 256 (- (rem timepos 10) 5)) (* 128 (- 5 (quot timepos 10))) -1000)
                 (.add js/scene frame)))
   ;          (js/console.log timepos))
 ))))
