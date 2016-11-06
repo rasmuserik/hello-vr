@@ -25,6 +25,7 @@
        (.remove js/scene o))
    )))
 (clear-scene)
+(js/setInterval #(.play js/video) 2000)
 
 ;; code for setting up the model
 
@@ -37,6 +38,7 @@
                (aset "width" 256)
                (aset "height" 128)
                )
+      frames #js []
       context (doto (.getContext canvas "2d")
         (aset "fillStyle" "blue")
         (.fillRect 20,20,100,60)
@@ -65,14 +67,39 @@
   ;(.add js/scene cube)
   (aset js/window "animate"
         (fn []
+          (.dispose material)
           (.drawImage context js/video 0 0 256 128)
           (aset material "map"
                 (doto (js/THREE.Texture. canvas) (aset "needsUpdate" true)))
           (aset material "needsUpdate" true)
           (aset tv "needsUpdate" true)
-          #_(js/console.log "update")
-          ))
+          (let [timepos (bit-or 0 (* 400 (/ js/video.currentTime js/video.duration)))]
+            (js/console.log (aget frames timepos))
+            (when (not (aget frames timepos))
+(let [canvas (doto (js/document.createElement "canvas")
+               (aset "width" 256)
+               (aset "height" 128)
+               )
+      context (doto (.getContext canvas "2d")
+        (.drawImage js/video 0 0 256 128)
+        )
+      texture (doto (js/THREE.Texture. canvas)
+                (aset "needsUpdate" true))
+      material (js/THREE.MeshBasicMaterial. #js {:map texture
+                                                 :side js/THREE.DoubleSide})
+      frame (js/THREE.Mesh.
+              (js/THREE.PlaneGeometry. (.-width canvas) (.-height canvas))
+              material)
+      ]
+  (aset frames timepos true)
+  (aset js/window "m" material)
+  (.set (.-position frame) (* 256 (- (rem timepos 20) 10)) (* 128 (- 10 (quot timepos 20))) -1000)
+  (.add js/scene frame)
   )
+              )
+  ;          (js/console.log timepos))
+          ))
+  ))
 
 (js/console.log "helo")
 ;; misc
