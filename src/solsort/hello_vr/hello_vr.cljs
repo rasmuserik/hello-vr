@@ -42,7 +42,7 @@
                 (.fillRect 20,20,100,60)
                 (aset "fillStyle" "red")
                 (aset "font" "30px sans-serif")
-                (.fillText "it works" 10 30)
+                (.fillText "loading..." 10 30)
                 (.drawImage js/video 0 0 256 128))
       texture (doto (js/THREE.Texture. canvas)
                 (aset "needsUpdate" true))
@@ -69,7 +69,6 @@
           (aset material "needsUpdate" true)
           (aset tv "needsUpdate" true)
           (let [timepos (bit-or 0 (* 400 (/ js/video.currentTime js/video.duration)))]
-            (js/console.log (aget frames timepos))
             (when (not (aget frames timepos))
               (let [canvas (doto (js/document.createElement "canvas")
                              (aset "width" 256)
