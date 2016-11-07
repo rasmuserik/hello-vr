@@ -59,6 +59,28 @@
   (.set (.-position tv) 0 0 -200)
   (aset (.-position cube) "z" -0.5)
   (.add js/scene tv)
+
+; Emily wrote it
+(let [canvas (doto (js/document.createElement "canvas")
+      (aset "width" 400)
+      (aset "height" 128))
+    context (doto (.getContext canvas "2d")
+              (aset "fillStyle" "white")
+              (aset "font" "12px sans-serif")
+              (.fillText "Developers: Emily Wu, RasmusErik Voel Jensen" 20 20))
+    texture (doto (js/THREE.Texture. canvas)
+              (aset "needsUpdate" true))
+     material (js/THREE.MeshBasicMaterial. #js {:map texture
+                                                 :side js/THREE.DoubleSide})
+      credit (js/THREE.Mesh.
+          (js/THREE.PlaneGeometry. (.-width canvas) (.-height canvas))
+          material)
+          
+] 
+(.set (.-position credit) 0 0 100 0)
+ (.add js/scene credit)
+)
+; Emily wrote it
   ;(.add js/scene cube)
   (aset js/window "animate"
         (fn []
